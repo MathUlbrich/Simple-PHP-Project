@@ -1,0 +1,25 @@
+version: '3.1'
+
+services:
+  db:
+    image: mysql:latest
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: sodaphp
+      MYSQL_USER: outside
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: root 
+    volumes:
+      - ./dbdump:/docker-entrypoint-initdb.d
+  sodaapp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8080:80
+    volumes:
+      - ./www:/var/www/html/
+    depends_on:
+      - db
+    
