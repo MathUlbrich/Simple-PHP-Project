@@ -1,7 +1,3 @@
-<?php 
-	$conn = null;	
-?>
-
 <html>
 	
 	<head>
@@ -19,9 +15,26 @@
 				</div>
 				<div class="form-group">
 					<label for="sodaName">Soda price</label>
-					<input type="number" class="form-control" id="sodaPrice" name="sodaPrice" min="1" step="any" placeholder="Soda price">
+					<input type="number" class="form-control" id="sodaPrice" name="sodaPrice" min="1" step=".02" placeholder="Soda price">
 				</div>
-			</form>			
+				<div class="form-group">
+					<select>
+						<?php
+							$conn = mysqli_connect('db', 'outside', 'password', 'sodaphp');
+							$stmt = "SELECT ID, NAME FROM BRAND";
+							$rs = mysqli_query($conn, $stmt);
+							while ($row = mysqli_fetch_row($rs)) {
+								$id   = $row[0];
+								$name = $row[1];
+						?>
+							<option value='<?=$id?>'><?=$name?></option>
+						<?php 
+							}
+							$conn->close();
+						?>
+					</select>
+				</div>
+			</form>
 		</div>
 
 	</body>
