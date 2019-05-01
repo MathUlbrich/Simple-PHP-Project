@@ -1,3 +1,25 @@
+<!DOCTYPE html>
+<?php
+    $brandId = $_GET["brandId"];
+	$brandName = "";
+    $method = "insert";
+
+	if (isset($brandId)) {
+		$method = "update";
+		$conn = mysqli_connect('db', 'outside', 'password', 'sodaphp');
+		$stmt = "SELECT NAME FROM BRAND WHERE ID = ?";
+		$prepStmt = $conn->prepare($stmt);
+        $prepStmt->bind_param('i', $brandId);
+		$prepStmt->execute();
+		$res = $prepStmt->get_result();
+		$row = $res->fetch_assoc();
+		$brandName = $row["NAME"];
+		$prepStmt->close();
+        $conn->close();
+	}
+
+?>
+
 <html>
 	
 	<head>
@@ -16,6 +38,12 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav">
+						<li class="nav-item active">
+                            <a class="nav-link" href="soda.php">New Soda<span class="sr-only">(current)</span></a>
+                        </li>
+						<li class="nav-item active">
+                            <a class="nav-link" href="brand.php">New Brand<span class="sr-only">(current)</span></a>
+                        </li>
                         <li class="nav-item active">
                             <a class="nav-link" href="soda-list.php">Soda List<span class="sr-only">(current)</span></a>
                         </li>
@@ -28,9 +56,11 @@
         </div>
 		<div class="central">
 			<form action="/brand-action.php" method="post">
+                <input type="hidden" id="format" name="format" value="<?=$method?>">
+                <input type="hidden" id="brandId" name="brandId" value=<?=$brandId?>>
 				<div class="form-group">
 					<label for="brandName">Brand name</label>
-					<input type="text" class="form-control" id="brandName" name="brandName" placeholder="Brand name">
+					<input type="text" class="form-control" id="brandName" name="brandName" placeholder="Brand name" value="<?=$brandName?>">
 				</div>
 				<div class="form-group">
 					<button type="submit" class="btn btn-outline-primary">SAVE</button>

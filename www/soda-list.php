@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 
     <head>
@@ -17,6 +18,12 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav">
                         <li class="nav-item active">
+                            <a class="nav-link" href="soda.php">New Soda<span class="sr-only">(current)</span></a>
+                        </li>
+						<li class="nav-item active">
+                            <a class="nav-link" href="brand.php">New Brand<span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item active">
                             <a class="nav-link" href="soda-list.php">Soda List<span class="sr-only">(current)</span></a>
                         </li>
                         <li class="nav-item">
@@ -26,6 +33,52 @@
                 </div>
             </nav>
         </div>
+
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                <th scope="col">ID</th>
+                <th scope="col">NAME</th>
+                <th scope="col">PRICE</th>
+                <th scope="col">BRAND</th>
+                <th scope="col">ACTION</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                    $conn = mysqli_connect('db', 'outside', 'password', 'sodaphp');
+                    $stmt = "SELECT SODA.ID, SODA.NAME, SODA.PRICE, BD.NAME FROM SODA JOIN BRAND BD ON (BRAND = BD.ID);";
+                    $rs = mysqli_query($conn, $stmt);
+                    while ($row = mysqli_fetch_row($rs)) {
+                        $id    = $row[0];
+                        $name  = $row[1];
+                        $price = $row[2];
+                        $brand = $row[3];
+                ?>
+                    <tr>
+                    <th scope="row"><?=$id?></th>
+                    <td><?=$name?></td>
+                    <td><?=$price?></td>
+                    <td><?=$brand?></td>
+                    <td>
+                        <form action="soda.php" method="get" style="display: inline-block;">
+                            <input type="hidden" id="sodaId" name="sodaId" value=<?=$id?>>
+                            <button type="submit" class="btn btn-secondary">UPDATE</button>
+                        </form>
+                        <form action="soda-action.php" method="get" style="display: inline-block;">
+                            <input type="hidden" id="format" name="format" value="delete">
+                            <input type="hidden" id="sodaId" name="sodaId" value=<?=$id?>>
+                            <button type="submit" class="btn btn-danger">DELETE</button>
+                        </form>
+                    </td>
+                    </tr>
+                <?php
+                    }
+                    $conn->close();
+                ?>
+            </tbody>
+        </table>
+
     </body>
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
