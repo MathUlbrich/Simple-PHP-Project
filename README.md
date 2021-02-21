@@ -1,2 +1,3 @@
-# SodaPHPProject
-University homework of soda-crud webapp with PHP
+# Simple PHP Project
+
+Simple project using PHP language
